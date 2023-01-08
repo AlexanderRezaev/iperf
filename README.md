@@ -4,9 +4,7 @@
 
 ## Тест на сетевых интерфейсах 10G lan. Пример нормального канала и пример канала со сбоями.
 
-<pre><code>
-
-[user1@pg-1 ~]$ iperf3 -c 192.168.235.52 -i 1 -t 20 -P 4
+<pre><code>[user1@pg-1 ~]$ iperf3 -c 192.168.235.52 -i 1 -t 20 -P 4
 Connecting to host 192.168.235.52, port 5201
 [  4] local 192.168.235.55 port 47160 connected to 192.168.235.52 port 5201
 [  6] local 192.168.235.55 port 47162 connected to 192.168.235.52 port 5201
@@ -46,5 +44,4 @@ Connecting to host 192.168.235.52, port 5201
 [SUM]   0.00-20.00  sec   266 MBytes   111 Mbits/sec  6252             sender
 [SUM]   0.00-20.00  sec   264 MBytes   111 Mbits/sec                  receiver
 iperf Done.
-
 </code></pre>
