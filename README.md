@@ -51,11 +51,10 @@ iperf Done.
  При наличии 2-х - 3-х серверов можно протестировать вручную.
  При большем количестве вспоминаем формулу числа размещений (т.к. прядок важен):
 
+https://www.matburo.ru/tvart_sub.php?p=calc_A
 ![alt text](cnk1.png)
 
-https://www.matburo.ru/tvart_sub.php?p=calc_A
-
-P.S.
+#P.S.
 https://vuzlit.com/2250166/postanovka_zadachi
 Недостатки протокола TCP
 
