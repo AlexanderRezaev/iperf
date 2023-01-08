@@ -54,7 +54,7 @@ iperf Done.
 https://www.matburo.ru/tvart_sub.php?p=calc_A
 ![alt text](cnk1.png)
 
-#P.S.<BR>
+# P.S.<BR>
 https://vuzlit.com/2250166/postanovka_zadachi<BR>
 Недостатки протокола TCP
 
