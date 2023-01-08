@@ -1,3 +1,5 @@
+<pre><code>
+
 ansible-playbook -i inv_hosts ssh-known_hosts.yml
 ansible-playbook -i inv_hosts ssh-copy-id.yml
 
@@ -75,3 +77,5 @@ ansible-playbook -i inv_hosts test.yml
       mode: 0644
     when: item != inventory_hostname
     with_items: "{{ groups['ipsec_enable'] }}"	# на каждом сервере из groups['ipsec_enable'] выполнить цикл по элементам [item] из groups['ipsec_enable'] кроме самого себя
+
+</code></pre>
