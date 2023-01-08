@@ -1,0 +1,12 @@
+---
+  - hosts: [iperf]
+    become: yes
+    any_errors_fatal: true
+
+    vars:
+      iperf_test_timeout: 20
+      iperf_interface_speed: 10000	# dmesg | grep $(ip route get 1 | awk '{print $5;exit}') | grep -i 'NIC Link is Up' | rev | awk '{print $2}' | rev
+
+    roles:
+
+      - iperf-test

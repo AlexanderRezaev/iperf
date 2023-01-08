@@ -1,0 +1,6 @@
+[iperf]
+u20d1h1 ansible_set_ip=172.27.172.131 ansible_set_fqdn=u20d1h1.lab.local ansible_order_id=1
+u20d1h2 ansible_set_ip=172.27.172.132 ansible_set_fqdn=u20d1h2.lab.local ansible_order_id=2
+u20d1h3 ansible_set_ip=172.27.172.133 ansible_set_fqdn=u20d1h3.lab.local ansible_order_id=3
+u20d1h4 ansible_set_ip=172.27.172.130 ansible_set_fqdn=u20d1h4.lab.local ansible_order_id=4
+u16d1h5 ansible_set_ip=172.27.172.129 ansible_set_fqdn=u16d1h5.lab.local ansible_order_id=5

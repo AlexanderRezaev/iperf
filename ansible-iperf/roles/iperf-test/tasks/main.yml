@@ -1,0 +1,102 @@
+---
+- local_action: command hostname
+  register: hst
+  run_once: true
+
+- name: Notify SysLog | {{ playbook_dir | basename }} role={{ role_name }} inventory={{ inventory_file }} tag={{ ansible_run_tags }}
+  shell: logger -t {{ hst.stdout }} "ansible playbook started  {{ playbook_dir }} role={{ role_name }} inventory={{ inventory_file }} tag={{ ansible_run_tags }}"
+
+- name: Check all servers DCS & PostgreSQL are available
+  vars:
+    HOST_RUN_COUNT: "{{ ansible_play_batch | length }}"
+    HOST_ALL_COUNT: "{{ groups['iperf'] | length }}"
+  ansible.builtin.debug:
+    msg: "{{ HOST_ALL_COUNT }} != {{ HOST_RUN_COUNT }} - ipsec must be performed on ALL machines group=iperf only"
+  failed_when: HOST_ALL_COUNT != HOST_RUN_COUNT
+
+- debug: msg="{{ ansible_distribution }}"
+
+
+- name: Configure /etc/hosts. Comment on 127.0.1.1
+  lineinfile:
+    dest: "/etc/hosts"
+    regexp: '(?i)^(127\.0\.1\.1 .*)'
+    line: '# \1'
+    backrefs: yes
+    state: present
+
+- name: Configure /etc/hosts.
+  lineinfile:
+    dest: "/etc/hosts"
+    line: "{{ hostvars[item].ansible_set_ip }}	{{ hostvars[item].ansible_set_fqdn }}	{{ item }}"
+    state: present
+    create: yes
+  with_items: "{{ groups['iperf'] }}"
+
+- name: Install the latest version of iperf3
+  package:
+    name: iperf3
+    state: present
+  register: iperf_rc
+  ignore_errors: yes
+
+- name: Install the latest version of moreutils
+  package:
+    name: moreutils
+    state: present
+  register: moreutils_rc
+  ignore_errors: yes
+
+- name: copy iperf.sh
+  template: src=iperf.sh dest=/tmp/iperf.sh mode=0700 owner=root group=root
+
+- name: start server iperf
+  shell: iperf3 --server --daemon --pidfile /tmp/iperf3.pid
+
+- name: run client iperf
+  shell: "/tmp/iperf.sh {{ item }} {{ iperf_test_timeout }}"
+  register: iperf_out
+#  when: item != inventory_hostname
+  with_items: "{{ groups['iperf'] }}"
+
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html#set-theory-filters
+
+#- debug: msg="{{ iperf_out }}"
+
+#- debug: msg="{{ iperf_out.results }}"
+#  when: item != inventory_hostname
+#  with_items: "{{ groups['iperf'] }}"
+
+- debug: msg="{{ iperf_out.results|map(attribute='stdout_lines')|list }}"
+
+#- debug: msg="{{ inventory_hostname }} {{ item }} {{ iperf_out.results|map(attribute='stdout_lines')|list }}"
+#  when: item != inventory_hostname
+#  with_items: "{{ groups['iperf'] }}"
+
+#- debug: msg="{{ inventory_hostname }} {{ item }} {{ iperf_out.results|selectattr("item", "stdout_lines")|list }}"
+#- debug: msg="{{ inventory_hostname }} {{ item }} {{ iperf_out.results|selectattr("item")|list }}"
+#  when: item != inventory_hostname
+#  with_items: "{{ groups['iperf'] }}"
+
+##- debug: msg="{{ inventory_hostname }} {{ item }} {{ iperf_out.results.json_query(item_name_query) }}"
+##  vars:
+##    server_name_query: "iperf_out.results[?contains(item,{{ item }})].stdout_lines"
+##  when: item != inventory_hostname
+##  with_items: "{{ groups['iperf'] }}"
+
+##- debug: msg="{{ inventory_hostname }} {{ item }} {{ iperf_out.results[?contains(item,{{ item }})]|map(attribute='stdout_lines')|list }}"
+##  when: item != inventory_hostname
+##  with_items: "{{ groups['iperf'] }}"
+
+- name: stop server iperf
+  shell: kill -3 "$(cat /tmp/iperf3.pid | tr -d '\0')"
+
+- name: remove file /tmp/iperf3.pid
+  shell: rm -f /tmp/iperf3.pid
+  args:
+    warn: no
+  ignore_errors: yes
+
+
+- name: Notify SysLog | {{ playbook_dir | basename }} role={{ role_name }} inventory={{ inventory_file }} tag={{ ansible_run_tags }}
+  shell: logger -t {{ hst.stdout }} "ansible playbook finished {{ playbook_dir }} role={{ role_name }} inventory={{ inventory_file }} tag={{ ansible_run_tags }}"
