@@ -46,13 +46,13 @@ Connecting to host 192.168.235.52, port 5201
 iperf Done.
 </code></pre>
 
-## Тест с помощью ansible.<BR>
-
-Одиночное тестирование, вывод результата в одну строчку.
+Тестирование и вывод результата в одну строчку.
 
 <pre><code>root@u20d1h1:~# iperf3 -c u20d1h2 -i 1 -t 20 -P 4 --json | jq '.end.sum_sent.bits_per_second,.end.sum_received.bits_per_second' | tr "\n" " " | ts "$(hostname) u20d1h2"
 u20d1h1 u20d1h2 9646248716.601824 9634273378.841862
 </code></pre>
+
+## Тест с помощью ansible.<BR>
 
 Тестирование всех серверов в inv_hosts
 
