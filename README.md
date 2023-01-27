@@ -175,6 +175,7 @@ https://www.matburo.ru/tvart_sub.php?p=calc_A
 Так что лучше поручить тестирование какой-нибудь программе. Например, ansible.
 
 # P.S.<BR>
+https://www.dissercat.com/content/adaptivnaya-skhema-upravleniya-potokom-dlya-transportnogo-protokola-v-setyakh-s-kommutatsiei<BR>
 https://vuzlit.com/2250166/postanovka_zadachi<BR>
 Недостатки протокола TCP
 
